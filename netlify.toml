@@ -1,17 +1,19 @@
 [build]
-  command = "npm install && npm start"
-  functions = "netlify/functions"
+  command = "npm install"
   publish = "public"
 
 [build.environment]
   NODE_VERSION = "18"
 
 [[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-[dev]
-  command = "npm run dev"
-  port = 3000
-  publish = "public"
+[functions]
+  node_bundler = "esbuild"
