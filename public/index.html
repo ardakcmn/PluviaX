@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PluviaX - AI Hava Durumu Asistanı</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="language-switcher">
+                <button id="langTR" class="lang-btn active" data-lang="tr">🇹🇷 TR</button>
+                <button id="langEN" class="lang-btn" data-lang="en">🇬🇧 EN</button>
+            </div>
+            <h1>🌦️ PluviaX</h1>
+            <p class="subtitle" data-i18n="subtitle">Yapay zeka destekli hava durumu asistanı</p>
+        </header>
+
+        <main>
+            <!-- Konum ve Tarih Seçimi -->
+            <section class="location-section">
+                <h2 data-i18n="locationTitle">📍 Konum ve Tarih</h2>
+                <div class="input-group">
+                    <button id="getCurrentLocation" class="btn btn-secondary" data-i18n="useLocation">
+                        📍 Konumumu Kullan
+                    </button>
+                    <span class="or-text" data-i18n="or">veya</span>
+                    <input 
+                        type="text" 
+                        id="locationInput" 
+                        data-i18n-placeholder="locationPlaceholder"
+                        placeholder="Şehir adı girin (örn: Istanbul)" 
+                        class="input-field"
+                    >
+                </div>
+                <div class="date-picker-container">
+                    <label for="dateInput" class="date-label" data-i18n="dateLabel">📅 Tarih ve Saat Seçin</label>
+                    <input 
+                        type="datetime-local" 
+                        id="dateInput" 
+                        class="input-field date-input"
+                    >
+                </div>
+                <div id="locationDisplay" class="location-display"></div>
+            </section>
+
+            <!-- 7 Günlük Hava Durumu Tahmini -->
+            <section id="weeklyForecast" class="weekly-forecast hidden">
+                <h2 data-i18n="weeklyForecast">📅 7 Günlük Hava Tahmini</h2>
+                <div id="forecastDays" class="forecast-days"></div>
+            </section>
+
+            <!-- Chat Bölümü -->
+            <section class="chat-section">
+                <h2 data-i18n="activityTitle">💬 Aktivite Sorgusu</h2>
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message bot-message" data-i18n="welcomeMessage">
+                        Merhaba! 👋 Yapmak istediğin aktiviteyi yaz, hava durumuna göre sana tavsiye vereyim.
+                    </div>
+                </div>
+                <div class="chat-input-container">
+                    <input 
+                        type="text" 
+                        id="activityInput" 
+                        data-i18n-placeholder="activityPlaceholder"
+                        placeholder="Örn: Piknik yapmak istiyorum..." 
+                        class="chat-input"
+                    >
+                    <button id="sendActivity" class="btn btn-primary" data-i18n="send">Gönder</button>
+                </div>
+            </section>
+
+            <!-- Hava Durumu Kartı -->
+            <section id="weatherCard" class="weather-card hidden">
+                <h3 data-i18n="weatherTitle">Hava Durumu</h3>
+                <div id="weatherInfo"></div>
+                <div class="export-buttons">
+                    <button id="exportJSON" class="btn btn-export" data-i18n="exportJSON">📄 JSON İndir</button>
+                    <button id="exportCSV" class="btn btn-export" data-i18n="exportCSV">📊 CSV İndir</button>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p data-i18n="footer">NASA Space Apps Challenge 2025 - Will It Rain On My Parade? 🌧️</p>
+        </footer>
+    </div>
+
+    <div id="loader" class="loader hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+
