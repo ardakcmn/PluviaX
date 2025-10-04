@@ -5,7 +5,10 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node server.js"
+    "dev": "node server.js",
+    "build": "echo 'No build step required'",
+    "deploy": "vercel --prod",
+    "deploy:preview": "vercel"
   },
   "keywords": ["weather", "ai", "nasa", "space-apps"],
   "author": "",
