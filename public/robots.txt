@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://pluviax.earth/sitemap.xml
+
+# Disallow API endpoints from crawling
+Disallow: /api/
+
+# Allow main pages
+Allow: /
+Allow: /index.html
+Allow: /styles.css
+Allow: /app.js

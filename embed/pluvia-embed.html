@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PluviaX Weather Widget</title>
+    <style>
+        .pluvia-embed {
+            width: 100%;
+            height: 600px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .pluvia-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .pluvia-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="pluvia-container">
+        <div class="pluvia-header">
+            <h2>🌦️ PluviaX Weather Assistant</h2>
+            <p>AI-powered weather recommendations for your activities</p>
+        </div>
+        
+        <!-- PluviaX Widget Embed -->
+        <iframe 
+            src="https://your-pluvia-app.vercel.app" 
+            class="pluvia-embed"
+            title="PluviaX Weather Assistant"
+            allow="geolocation"
+        >
+        </iframe>
+        
+        <div style="text-align: center; margin-top: 10px; color: #666;">
+            <small>Powered by <a href="https://github.com/ardakcmn/PluviaX" target="_blank">PluviaX</a></small>
+        </div>
+    </div>
+</body>
+</html>

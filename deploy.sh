@@ -27,4 +27,5 @@ echo "🚀 Deploying to Vercel..."
 vercel --prod --yes
 
 echo "✅ Deploy completed!"
-echo "🌐 Your app should be live at: https://your-app.vercel.app"
+echo "🌐 Your app should be live at: https://pluviax.earth"
+echo "🌍 Alternative URL: https://www.pluviax.earth"

@@ -1,6 +1,7 @@
 {
   "version": 2,
   "name": "pluvia-weather-ai",
+  "alias": ["pluviax.earth", "www.pluviax.earth"],
   "builds": [
     {
       "src": "server.js",
@@ -20,5 +21,24 @@
     "server.js": {
       "maxDuration": 30
     }
-  }
+  },
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
+    }
+  ]
 }
