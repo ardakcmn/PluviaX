@@ -6,8 +6,18 @@
   NODE_VERSION = "18"
 
 [[redirects]]
-  from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  from = "/api/weather"
+  to = "/.netlify/functions/weather"
+  status = 200
+
+[[redirects]]
+  from = "/api/analyze"
+  to = "/.netlify/functions/analyze"
+  status = 200
+
+[[redirects]]
+  from = "/api/export"
+  to = "/.netlify/functions/export"
   status = 200
 
 [[redirects]]

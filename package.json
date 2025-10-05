@@ -19,6 +19,9 @@
     "dotenv": "^16.3.1",
     "node-fetch": "^2.7.0",
     "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "@netlify/plugin-functions": "^1.0.0"
   }
 }
 

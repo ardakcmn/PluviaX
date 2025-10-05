@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+// Simple AI analysis function for Netlify
 
 exports.handler = async (event, context) => {
     // CORS headers
@@ -20,34 +20,20 @@ exports.handler = async (event, context) => {
     try {
         const { activity, weatherData, language = 'tr' } = JSON.parse(event.body || '{}');
         
-        // Check if DeepSeek API key is available
-        const apiKey = process.env.DEEPSEEK_API_KEY;
-        
-        if (!apiKey) {
-            // Return mock AI response when API key is missing
-            const mockResponse = {
-                analysis: language === 'tr' 
-                    ? `Hava durumu: ${weatherData.temperature}°C, ${weatherData.description}. ${activity} aktivitesi için uygun görünüyor. Detaylı analiz için API anahtarı gerekli.`
-                    : `Weather: ${weatherData.temperature}°C, ${weatherData.description}. Looks suitable for ${activity}. API key needed for detailed analysis.`,
-                language: language,
-                timestamp: new Date().toISOString(),
-                mock: true
-            };
-            
-            return {
-                statusCode: 200,
-                headers,
-                body: JSON.stringify(mockResponse)
-            };
-        }
-        
-        // DeepSeek AI API
-        const aiResponse = await fetchDeepSeekAI(activity, weatherData, language);
+        // Return mock AI response
+        const mockResponse = {
+            analysis: language === 'tr' 
+                ? `Hava durumu: ${weatherData.temperature || 22}°C, ${weatherData.description || 'Açık'}. ${activity} aktivitesi için uygun görünüyor. Detaylı analiz için API anahtarı gerekli.`
+                : `Weather: ${weatherData.temperature || 22}°C, ${weatherData.description || 'Clear'}. Looks suitable for ${activity}. API key needed for detailed analysis.`,
+            language: language,
+            timestamp: new Date().toISOString(),
+            mock: true
+        };
         
         return {
             statusCode: 200,
             headers,
-            body: JSON.stringify(aiResponse)
+            body: JSON.stringify(mockResponse)
         };
     } catch (error) {
         console.error('AI Analysis error:', error);
@@ -58,56 +44,3 @@ exports.handler = async (event, context) => {
         };
     }
 };
-
-// DeepSeek AI API
-async function fetchDeepSeekAI(activity, weatherData, language) {
-    const apiKey = process.env.DEEPSEEK_API_KEY;
-    
-    if (!apiKey) {
-        throw new Error('DeepSeek API key missing');
-    }
-    
-    // Weather data summary
-    const weatherSummary = {
-        temperature: weatherData.temperature || 'N/A',
-        humidity: weatherData.humidity || 'N/A',
-        windSpeed: weatherData.windSpeed || 'N/A',
-        description: weatherData.description || 'N/A',
-        condition: weatherData.condition || 'N/A'
-    };
-    
-    // AI prompt based on language
-    const prompt = language === 'tr' 
-        ? `Sen bir hava durumu uzmanısın. Kullanıcı "${activity}" aktivitesini yapmak istiyor. Hava durumu: ${JSON.stringify(weatherSummary)}. Bu aktivite için hava durumu uygun mu? Detaylı tavsiye ver.`
-        : `You are a weather expert. User wants to do "${activity}". Weather: ${JSON.stringify(weatherSummary)}. Is the weather suitable for this activity? Give detailed advice.`;
-    
-    const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            model: 'deepseek-chat',
-            messages: [
-                {
-                    role: 'user',
-                    content: prompt
-                }
-            ],
-            max_tokens: 500,
-            temperature: 0.7
-        })
-    });
-    
-    if (!response.ok) {
-        throw new Error(`DeepSeek API error: ${response.status}`);
-    }
-    
-    const data = await response.json();
-    return {
-        analysis: data.choices[0].message.content,
-        language: language,
-        timestamp: new Date().toISOString()
-    };
-}

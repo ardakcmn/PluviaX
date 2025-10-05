@@ -416,7 +416,7 @@ async function sendActivity() {
     
     try {
         // Hava durumu verisini al
-        const weatherResponse = await fetch('/.netlify/functions/weather', {
+        const weatherResponse = await fetch('/api/weather', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -443,7 +443,7 @@ async function sendActivity() {
         displayWeather(weatherInfo);
         
         // AI analizi yap
-        const aiResponse = await fetch('/.netlify/functions/analyze', {
+        const aiResponse = await fetch('/api/analyze', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -499,7 +499,7 @@ async function fetch7DayForecast(lat, lon) {
         
         // Her gün için veri çek
         const promises = forecastDays.map(date => 
-            fetch('/.netlify/functions/weather', {
+            fetch('/api/weather', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ lat, lon, date })
@@ -687,7 +687,7 @@ async function exportData(format) {
     try {
         showLoader();
         
-        const url = `/.netlify/functions/export`;
+        const url = `/api/export`;
         
         const response = await fetch(url, {
             method: 'POST',
