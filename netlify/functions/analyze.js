@@ -20,6 +20,27 @@ exports.handler = async (event, context) => {
     try {
         const { activity, weatherData, language = 'tr' } = JSON.parse(event.body || '{}');
         
+        // Check if DeepSeek API key is available
+        const apiKey = process.env.DEEPSEEK_API_KEY;
+        
+        if (!apiKey) {
+            // Return mock AI response when API key is missing
+            const mockResponse = {
+                analysis: language === 'tr' 
+                    ? `Hava durumu: ${weatherData.temperature}°C, ${weatherData.description}. ${activity} aktivitesi için uygun görünüyor. Detaylı analiz için API anahtarı gerekli.`
+                    : `Weather: ${weatherData.temperature}°C, ${weatherData.description}. Looks suitable for ${activity}. API key needed for detailed analysis.`,
+                language: language,
+                timestamp: new Date().toISOString(),
+                mock: true
+            };
+            
+            return {
+                statusCode: 200,
+                headers,
+                body: JSON.stringify(mockResponse)
+            };
+        }
+        
         // DeepSeek AI API
         const aiResponse = await fetchDeepSeekAI(activity, weatherData, language);
         

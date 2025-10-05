@@ -24,20 +24,69 @@ exports.handler = async (event, context) => {
         const requestDate = date ? new Date(date).toISOString() : new Date().toISOString();
         const dateObj = new Date(requestDate);
         
+        // Check if we have required environment variables
+        const hasMeteomatics = process.env.METEOMATICS_USERNAME && process.env.METEOMATICS_PASSWORD;
+        const hasOpenWeather = process.env.OPENWEATHER_API_KEY;
+        const hasNASA = process.env.NASA_API_KEY;
+        
+        // Build promises array based on available APIs
+        const promises = [];
+        const promiseNames = [];
+        
+        if (hasMeteomatics) {
+            promises.push(fetchMeteomatics(lat, lon, requestDate));
+            promiseNames.push('meteomatics');
+        }
+        
+        if (hasOpenWeather) {
+            promises.push(fetchOpenWeather(lat, lon, dateObj));
+            promiseNames.push('openweather');
+        }
+        
+        if (hasNASA) {
+            promises.push(fetchNASA(lat, lon, dateObj));
+            promiseNames.push('nasa');
+        }
+        
+        // If no APIs are configured, return mock data
+        if (promises.length === 0) {
+            const mockData = {
+                meteomatics: null,
+                openweather: {
+                    main: { temp: 22, humidity: 65 },
+                    weather: [{ description: "Clear sky", id: 800 }],
+                    wind: { speed: 3.5, deg: 180 }
+                },
+                nasa: null,
+                timestamp: new Date().toISOString(),
+                mock: true
+            };
+            
+            return {
+                statusCode: 200,
+                headers,
+                body: JSON.stringify(mockData)
+            };
+        }
+        
         // Paralel olarak tüm API'lerden veri çek
-        const [meteomaticsData, openWeatherData, nasaData] = await Promise.allSettled([
-            fetchMeteomatics(lat, lon, requestDate),
-            fetchOpenWeather(lat, lon, dateObj),
-            fetchNASA(lat, lon, dateObj)
-        ]);
+        const results = await Promise.allSettled(promises);
         
         // Verileri birleştir
         const combinedData = {
-            meteomatics: meteomaticsData.status === 'fulfilled' ? meteomaticsData.value : null,
-            openweather: openWeatherData.status === 'fulfilled' ? openWeatherData.value : null,
-            nasa: nasaData.status === 'fulfilled' ? nasaData.value : null,
+            meteomatics: null,
+            openweather: null,
+            nasa: null,
             timestamp: new Date().toISOString()
         };
+        
+        // Map results to their respective APIs
+        results.forEach((result, index) => {
+            const apiName = promiseNames[index];
+            if (result.status === 'fulfilled') {
+                combinedData[apiName] = result.value;
+            }
+        });
 
         return {
             statusCode: 200,
